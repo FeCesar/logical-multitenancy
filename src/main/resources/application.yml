@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: ${PROFILE}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          lab:
+            non_contextual_creation: true
+
+server:
+  servlet:
+    context-path: /api
+
+---
+
+spring:
+  profiles: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/park
+    username: postgres
+    password: postgres
+
+---
+
+spring:
+  profiles: prd
+  datasource:
+    url: ${POSTGRES_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
