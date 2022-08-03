@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -44,7 +45,7 @@ public class CarController {
         }
 
         CarDTO carDTO = this.carService.findByLicensePlateCar(tenantDTO.getId(), carForm.getLicensePlateCar());
-        if(carDTO != null){
+        if(!Objects.isNull(carDTO)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Already exists a same license plate car!");
         }
 
@@ -61,7 +62,7 @@ public class CarController {
     public ResponseEntity<Object> getAll(@RequestAttribute String tenantName){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
 
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
@@ -71,7 +72,7 @@ public class CarController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@RequestAttribute String tenantName, @PathVariable UUID id){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
@@ -86,12 +87,12 @@ public class CarController {
     @GetMapping("/by/{residentId}")
     public ResponseEntity<Object> getCarsByResident(@RequestAttribute String tenantName, @PathVariable UUID residentId){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
         ResidentDTO residentDTO = this.residentService.findById(tenantDTO.getId(), residentId);
-        if(residentDTO == null){
+        if(Objects.isNull(residentDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not Exists");
         }
 

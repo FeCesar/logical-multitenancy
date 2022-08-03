@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -32,7 +33,7 @@ public class ResidentController {
     public ResponseEntity<Object> saveResident(@RequestAttribute String tenantName, @RequestBody @Valid ResidentForm residentForm){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
 
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not exists");
         }
 
@@ -47,7 +48,7 @@ public class ResidentController {
     public ResponseEntity<Object> getAll(@RequestAttribute String tenantName){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
 
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
@@ -58,13 +59,13 @@ public class ResidentController {
     public ResponseEntity<Object> getById(@PathVariable UUID id, @RequestAttribute String tenantName){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
 
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
         ResidentDTO residentDTO = this.residentService.findById(tenantDTO.getId(), id);
 
-        if(residentDTO == null){
+        if(Objects.isNull(residentDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not Exists");
         }
 

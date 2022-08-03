@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
@@ -37,12 +38,12 @@ public class ParkingSpotController {
     @PostMapping("/")
     public ResponseEntity<Object> save(@RequestAttribute String tenantName, @RequestBody @Valid ParkingSpotForm parkingSpotForm){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
         ParkingSpotDTO parkingSpotDTO = this.parkingSpotService.findByParkingSpotNumber(tenantDTO.getId(), parkingSpotForm.getParkingSpotNumber());
-        if(parkingSpotDTO != null){
+        if(!Objects.isNull(parkingSpotDTO)){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Already exists spot number!");
         }
 
@@ -56,7 +57,7 @@ public class ParkingSpotController {
     @GetMapping("/")
     public ResponseEntity<Object> getAll(@RequestAttribute String tenantName){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
@@ -66,12 +67,12 @@ public class ParkingSpotController {
     @GetMapping("/{id}")
     public ResponseEntity<Object> getById(@RequestAttribute String tenantName, @PathVariable UUID id){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
         ParkingSpotDTO parkingSpotDTO = this.parkingSpotService.findById(tenantDTO.getId(), id);
-        if(parkingSpotDTO == null){
+        if(Objects.isNull(parkingSpotDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spot not exists");
         }
 
@@ -81,7 +82,7 @@ public class ParkingSpotController {
     @GetMapping("/by/{status}")
     public ResponseEntity<Object> getByStatus(@RequestAttribute String tenantName, @PathVariable String status){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
@@ -97,17 +98,17 @@ public class ParkingSpotController {
     @PatchMapping("/")
     public ResponseEntity<Object> update(@RequestAttribute String tenantName, @RequestBody ParkingSpotUpdateForm parkingSpotUpdateForm){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
         ParkingSpotDTO parkingSpotDTO = this.parkingSpotService.findByParkingSpotNumber(tenantDTO.getId(), parkingSpotUpdateForm.getParkingSpotNumber());
-        if(parkingSpotDTO == null){
+        if(Objects.isNull(parkingSpotDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Spot not exists");
         }
 
         CarDTO carDTO = this.carService.findById(tenantDTO.getId(), parkingSpotUpdateForm.getCarId());
-        if(carDTO == null){
+        if(Objects.isNull(carDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not exists");
         }
 
