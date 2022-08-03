@@ -35,12 +35,12 @@ public class CarController {
     @PostMapping("/")
     public ResponseEntity<Object> save(@RequestAttribute String tenantName, @RequestBody @Valid CarForm carForm){
         TenantDTO tenantDTO = this.tenantService.findByName(tenantName);
-        if(tenantDTO == null){
+        if(Objects.isNull(tenantDTO)){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Tenant not Exists");
         }
 
         ResidentDTO residentDTO = this.residentService.findById(tenantDTO.getId(), carForm.getResidentId());
-        if(residentDTO == null){
+        if(Objects.isNull(residentDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resident not Exists");
         }
 
@@ -77,7 +77,7 @@ public class CarController {
         }
 
         CarDTO carDTO = this.carService.findById(tenantDTO.getId(), id);
-        if(carDTO == null){
+        if(Objects.isNull(carDTO)){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Car not Exists");
         }
 
